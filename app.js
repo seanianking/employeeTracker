@@ -215,9 +215,13 @@ function init() {
             case 'Update information':
                 return update();
             case 'End application':
-                return (console.log('Fare thee well!'))
+                return process.exit();
             default:
                 console.log('Gotta pick something');
         }
     })
 };
+
+process.on('exit', () => {
+    console.log('Fare thee well!')
+})
