@@ -57,7 +57,7 @@ function add() {
         choices: [
             'Department',
             'Role',
-            'Employees'
+            'Employee'
         ]
     }]).then(function(response) {
         switch (response.action) {
@@ -68,68 +68,68 @@ function add() {
             case 'Employee':
                 return addEmp();
             default:
-                console.log("Gotta pick something");
+                console.log('Gotta pick something');
         }
     })
 };
 
 function addDep() {
-    console.log("You chose to add a department");
+    console.log('You are adding a department');
     inquirer.prompt([{
         type: 'input',
         name: 'name',
-        message: "Please type the department name: "
+        message: 'Please type the department name: '
     }]).then(function(response) {
-        insertInfo("department", response);
+        insertInfo('department', response);
     });
 };
 
 function addRole() {
-    console.log("You chose to add a Role");
+    console.log('You are adding a role');
     inquirer.prompt([{
             type: 'input',
             name: 'title',
-            message: "Please input role title: "
+            message: 'Please input role title: '
         },
         {
             type: 'input',
             name: 'salary',
-            message: "Please input role salary: "
+            message: 'Please input role salary: '
         },
         {
             type: 'input',
             name: 'department_id',
-            message: "Please input department id: "
+            message: 'Please input department id: '
         }
     ]).then(function(response) {
-        insertInfo("role", response);
+        insertInfo('role', response);
     });
 };
 
 function addEmp() {
-    console.log("You chose to add a Employee");
+    console.log('You are adding an employee');
     inquirer.prompt([{
             type: 'input',
             name: 'first_name',
-            message: "Employee first name: "
+            message: 'Employee first name: '
         },
         {
             type: 'input',
             name: 'last_name',
-            message: "Employee last name: "
+            message: 'Employee last name: '
         },
         {
             type: 'input',
             name: 'role_id',
-            message: "Employee role id: "
+            message: 'Employee role id: '
         },
         {
             type: 'input',
             name: 'manager_id',
-            message: "Employee manager id: "
+            message: 'Employee manager id: '
         }
     ]).then(function(response) {
-        insertInfo("employee", response);
+        insertInfo('employee', response);
     });
 };
 
@@ -154,21 +154,21 @@ function view() {
             case 'Employee':
                 return viewEmp();
             default:
-                console.log("Gotta pick something");
+                console.log('Gotta pick something');
         }
     });
 };
 
 function viewDep() {
-    viewInfo("department");
+    viewInfo('department');
 };
 
 function viewRole() {
-    viewInfo("role");
+    viewInfo('role');
 };
 
 function viewEmp() {
-    viewInfo("employee");
+    viewInfo('employee');
 };
 
 function update() {
@@ -176,20 +176,45 @@ function update() {
     inquirer.prompt([{
             type: 'input',
             name: 'role_id',
-            message: "New Role id you wish to give employee: "
+            message: 'New Role id you wish to give employee: '
         },
         {
             type: 'input',
             name: 'first_name',
-            message: "Name of employee you wish to update to new role: "
+            message: 'Name of employee you wish to update to new role: '
         }
     ]).then(function(response) {
-        var queryString = "UPDATE employee SET role_id = ? WHERE first_name = ?";
+        var queryString = 'UPDATE employee SET role_id = ? WHERE first_name = ?';
 
         connection.query(queryString, [response.role_id, response.first_name], function(err, result) {
             if (err) throw err;
 
         });
         init();
+    })
+};
+
+//initial function for input to determine action to take
+function init() {
+    inquirer.prompt([{
+        type: 'list',
+        name: 'action',
+        message: 'Tell me what you want to do',
+        choices: [
+            'Add information',
+            'View information',
+            'Update information'
+        ]
+    }]).then(function(response) {
+        switch (response.action) {
+            case 'Add information':
+                return add();
+            case 'View information':
+                return view();
+            case 'Update information':
+                return update();
+            default:
+                console.log('Gotta pick something');
+        }
     })
 };
