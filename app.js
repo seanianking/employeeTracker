@@ -7,7 +7,7 @@ let connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: process.env.PASSWORD,
+    password: process.env.MYSQL_PASSWORD,
     database: 'tracker_db'
 });
 
@@ -47,9 +47,9 @@ function viewInfo(table) {
     init();
 };
 
-
+//prompt to determine which table to add info into
 function add() {
-    console.log("Now adding information");
+    console.log('Now adding information');
     inquirer.prompt([{
         type: 'list',
         name: 'action',
@@ -133,9 +133,9 @@ function addEmp() {
     });
 };
 
-
+//prompts to pull which table to view
 function view() {
-    // console.log("You chose to VIEW")
+    console.log('Now viewing information')
     inquirer.prompt([{
         type: 'list',
         name: 'action',
@@ -169,4 +169,27 @@ function viewRole() {
 
 function viewEmp() {
     viewInfo("employee");
+};
+
+function update() {
+    console.log('Now updating information')
+    inquirer.prompt([{
+            type: 'input',
+            name: 'role_id',
+            message: "New Role id you wish to give employee: "
+        },
+        {
+            type: 'input',
+            name: 'first_name',
+            message: "Name of employee you wish to update to new role: "
+        }
+    ]).then(function(response) {
+        var queryString = "UPDATE employee SET role_id = ? WHERE first_name = ?";
+
+        connection.query(queryString, [response.role_id, response.first_name], function(err, result) {
+            if (err) throw err;
+
+        });
+        init();
+    })
 };
