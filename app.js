@@ -11,7 +11,7 @@ let connection = mysql.createConnection({
     database: 'tracker_db'
 });
 
-connection.connect(function(err){
+connection.connect(function(err) {
     if (err) throw err;
     console.log('Connected as id ' + connection.threadId);
     init();
@@ -25,22 +25,21 @@ connection.connect(function(err){
 // called.
 
 //function to add information
-function insertInfo(table, response){
+function insertInfo(table, response) {
     let queryString = 'INSERT INTO ?? SET ?';
-    connection.query(queryString, [table, response], function(err, result){
+    connection.query(queryString, [table, response], function(err, result) {
         if (err) throw err;
         console.log('info added')
     })
     init();
 };
 
-//inquirer function to determine which table to add to
 
 
 //pull information to view
-function viewInfo(table){
+function viewInfo(table) {
     let queryString = 'SELECT * FROM ??';
-    connection.query(queryString, [table], function(err, result){
+    connection.query(queryString, [table], function(err, result) {
         if (err) throw err;
         console.log('Viewing ' + table)
         console.log(result);
@@ -48,9 +47,88 @@ function viewInfo(table){
     init();
 };
 
-//inquirer function to determine which table to view
 
+function add() {
+    console.log("Now adding information");
+    inquirer.prompt([{
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to add?',
+        choices: [
+            'Department',
+            'Role',
+            'Employees'
+        ]
+    }]).then(function(response) {
+        switch (response.action) {
+            case 'Department':
+                return addDep();
+            case 'Role':
+                return addRole();
+            case 'Employee':
+                return addEmp();
+            default:
+                console.log("Gotta pick something");
+        }
+    })
+};
 
+function addDep() {
+    console.log("You chose to add a department");
+    inquirer.prompt([{
+        type: 'input',
+        name: 'name',
+        message: "Please type the department name: "
+    }]).then(function(response) {
+        insertInto("department", response);
+    });
+};
 
+function addRole() {
+    console.log("You chose to add a Role");
+    inquirer.prompt([{
+            type: 'input',
+            name: 'title',
+            message: "Please input role title: "
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: "Please input role salary: "
+        },
+        {
+            type: 'input',
+            name: 'department_id',
+            message: "Please input department id: "
+        }
+    ]).then(function(response) {
+        insertInto("role", response);
+    });
+};
 
-
+function addEmp() {
+    console.log("You chose to add a Employee");
+    inquirer.prompt([{
+            type: 'input',
+            name: 'first_name',
+            message: "Employee first name: "
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: "Employee last name: "
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: "Employee role id: "
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: "Employee manager id: "
+        }
+    ]).then(function(response) {
+        insertInto("employee", response);
+    });
+};
