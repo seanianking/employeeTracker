@@ -203,7 +203,8 @@ function init() {
         choices: [
             'Add information',
             'View information',
-            'Update information'
+            'Update information',
+            'End application'
         ]
     }]).then(function(response) {
         switch (response.action) {
@@ -213,6 +214,8 @@ function init() {
                 return view();
             case 'Update information':
                 return update();
+            case 'End application':
+                return (console.log('Fare thee well!'))
             default:
                 console.log('Gotta pick something');
         }
