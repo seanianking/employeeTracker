@@ -80,7 +80,7 @@ function addDep() {
         name: 'name',
         message: "Please type the department name: "
     }]).then(function(response) {
-        insertInto("department", response);
+        insertInfo("department", response);
     });
 };
 
@@ -102,7 +102,7 @@ function addRole() {
             message: "Please input department id: "
         }
     ]).then(function(response) {
-        insertInto("role", response);
+        insertInfo("role", response);
     });
 };
 
@@ -129,6 +129,44 @@ function addEmp() {
             message: "Employee manager id: "
         }
     ]).then(function(response) {
-        insertInto("employee", response);
+        insertInfo("employee", response);
     });
+};
+
+
+function view() {
+    // console.log("You chose to VIEW")
+    inquirer.prompt([{
+        type: 'list',
+        name: 'action',
+        message: 'Which table would you like to view?',
+        choices: [
+            'Department',
+            'Role',
+            'Employee'
+        ]
+    }]).then(function(response) {
+        switch (response.action) {
+            case 'Department':
+                return viewDep();
+            case 'Role':
+                return viewRole();
+            case 'Employee':
+                return viewEmp();
+            default:
+                console.log("Gotta pick something");
+        }
+    });
+};
+
+function viewDep() {
+    viewInfo("department");
+};
+
+function viewRole() {
+    viewInfo("role");
+};
+
+function viewEmp() {
+    viewInfo("employee");
 };
